@@ -66,9 +66,17 @@ def index():
     if request.method == 'POST':
         wso_file = request.files['wso_file']
         usb_file = request.files['usb_file']
-        wso_lxid = request.form['wso_lxid']
-        wso_issuer = request.form['wso_issuer']
-        wso_amount = request.form['wso_amount']
+        naming_type = request.form['naming_type']
+
+        if naming_type == 'standard':
+            wso_lxid = 'Asset_LoanXIDAssetID_Name'
+            wso_issuer = 'Issuer_Name'
+            wso_amount = 'QuantityTraded'
+        else:
+            wso_lxid = request.form['wso_lxid']
+            wso_issuer = request.form['wso_issuer']
+            wso_amount = request.form['wso_amount']
+
         usb_lxid = request.form['usb_lxid']
         usb_issuer = request.form['usb_issuer']
         usb_amount = request.form['usb_amount']

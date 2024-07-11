@@ -1,32 +1,63 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Data Processing Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Processing form</title>
+    <script>
+        function toggleNonstandardFields() {
+            const namingType = document.getElementById('naming_type').value;
+            const nonstandardFields = document.getElementById('nonstandard-fields');
+            if (namingType === 'standard') {
+                nonstandardFields.style.display = 'none';
+            } else {
+                nonstandardFields.style.display = 'block';
+            }
+        }
+        window.onload = function() {
+            toggleNonstandardFields();
+        };
+    </script>
 </head>
 <body>
     <h1>Upload Files to Process</h1>
     <form method="post" enctype="multipart/form-data">
         <label for="wso_file">WSO CSV File:</label><br>
         <input type="file" name="wso_file" required><br><br>
-        <label for="wso_lxid">WSO LXID Column:</label><br>
-        <input type="text" name="wso_lxid" required><br><br>
-        <label for="wso_issuer">WSO Issuer Column:</label><br>
-        <input type="text" name="wso_issuer" required><br><br>
-        <label for="wso_amount">WSO Quantity Traded Column:</label><br>
-        <input type="text" name="wso_amount" required><br><br>
+
         <label for="usb_file">Trustee CSV File:</label><br>
         <input type="file" name="usb_file" required><br><br>
-        <label for="usb_lxid">Trustee LXID Column:</label><br>
+
+        <label for="naming_type">WSO Naming Type:</label><br>
+        <select name="naming_type" id="naming_type" onchange="toggleNonstandardFields()" required>
+            <option value="standard">Standard</option>
+            <option value="nonstandard">Nonstandard</option>
+        </select><br><br>
+
+        <div id="nonstandard-fields">
+            <label for="wso_lxid">WSO LXID:</label><br>
+            <input type="text" name="wso_lxid"><br><br>
+
+            <label for="wso_issuer">WSO Issuer:</label><br>
+            <input type="text" name="wso_issuer"><br><br>
+
+            <label for="wso_amount">WSO Amount:</label><br>
+            <input type="text" name="wso_amount"><br><br>
+        </div>
+
+        <label for="usb_lxid">Trustee LXID:</label><br>
         <input type="text" name="usb_lxid" required><br><br>
-        <label for="usb_issuer">Trustee Issuer Column:</label><br>
+
+        <label for="usb_issuer">Trustee Issuer:</label><br>
         <input type="text" name="usb_issuer" required><br><br>
-        <label for="usb_amount">Trustee Quantity Traded Column:</label><br>
+
+        <label for="usb_amount">Trustee Amount:</label><br>
         <input type="text" name="usb_amount" required><br><br>
-        <label for="final_name">Final CSV File Name (include.csv):</label><br>
+
+        <label for="final_name">Final CSV Name (include .csv):</label><br>
         <input type="text" name="final_name" required><br><br>
-        <input type="submit" value="Process Files">
+
+        <input type="submit" value="Upload and Process">
     </form>
 </body>
 </html>
