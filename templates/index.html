@@ -23,9 +23,9 @@
     <h1>Data Processing for Tie-Outs</h1>
     <form method="post" enctype="multipart/form-data">
         <label for="wso_file">WSO CSV File:</label><br>
-        <input type="file" name="wso_file" required><br><br>
+        <input type="file" name="wso_file" accept=".csv" required><br><br>
 
-        <label for="naming_type">WSO Naming Type:</label><br>
+        <label for="naming_type">WSO Columns Naming Type:</label><br>
         <select name="naming_type" id="naming_type" onchange="toggleNonstandardFields()" required>
             <option value="standard">Standard</option>
             <option value="nonstandard">Nonstandard</option>
@@ -42,10 +42,13 @@
             <input type="text" name="wso_amount"><br><br>
         </div>
 
-        <label for="usb_file">Trustee CSV File:</label><br>
-        <input type="file" name="usb_file" required><br><br>
+        <label for="usb_file">Trustee Excel File:</label><br>
+        <input type="file" name="usb_file" accept=".xls,.xlsx,.xlsm" required><br><br>
 
-        <label for="usb_num_rows">Number of empty rows before column names for Trustee data:</label><br>
+        <label for="usb_sheet">Trustee Sheet Name:</label><br>
+        <input type="text" name="usb_sheet" required><br><br>
+
+        <label for="usb_num_rows">Number of rows before column names for Trustee data:</label><br>
         <input type="text" name="usb_num_rows" required><br><br>
 
         <label for="usb_lxid">Trustee LXID Column Name:</label><br>
