@@ -1,2 +1,2 @@
 # cash-breaks-processing
- Data processing for cash breaks Steele Creek Investment Management
+ Data processing web app for cash breaks Steele Creek Investment Management
