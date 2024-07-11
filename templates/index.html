@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Processing form</title>
+    <title>Data Processing Form</title>
     <script>
         function toggleNonstandardFields() {
             const namingType = document.getElementById('naming_type').value;
@@ -14,8 +14,20 @@
                 nonstandardFields.style.display = 'block';
             }
         }
+
+        function toggleAssetTypeField() {
+            const assetTypeCheckbox = document.getElementById('asset_type_present');
+            const assetTypeField = document.getElementById('asset-type-field');
+            if (assetTypeCheckbox.checked) {
+                assetTypeField.style.display = 'block';
+            } else {
+                assetTypeField.style.display = 'none';
+            }
+        }
+
         window.onload = function() {
             toggleNonstandardFields();
+            toggleAssetTypeField();
         };
     </script>
 </head>
@@ -45,6 +57,14 @@
         <label for="usb_file">Trustee Excel File:</label><br>
         <input type="file" name="usb_file" accept=".xls,.xlsx,.xlsm" required><br><br>
 
+        <label for="asset_type_present">Does the Trustee file contain equity amounts?</label><br>
+        <input type="checkbox" id="asset_type_present" name="asset_type_present" onchange="toggleAssetTypeField()"><br><br>
+
+        <div id="asset-type-field" style="display:none;">
+            <label for="asset_type_column">Asset Type Column Name:</label><br>
+            <input type="text" name="asset_type_column"><br><br>
+        </div>
+
         <label for="usb_sheet">Trustee Sheet Name:</label><br>
         <input type="text" name="usb_sheet" required><br><br>
 
@@ -60,7 +80,7 @@
         <label for="usb_amount">Trustee Amount Column Name:</label><br>
         <input type="text" name="usb_amount" required><br><br>
 
-        <label for="final_name">Final CSV Name (include .csv):</label><br>
+        <label for="final_name">Final Excel File Name (include .xlsx):</label><br>
         <input type="text" name="final_name" required><br><br>
 
         <input type="submit" value="Upload and Process">

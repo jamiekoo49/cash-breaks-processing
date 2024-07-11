@@ -17,13 +17,18 @@ def load_and_prepare_wso(wso_name, wso_lxid, wso_issuer, wso_amount):
     })
     return wso
 
-def load_and_prepare_usb(usb_name, sheet_name, usb_lxid, usb_issuer, usb_amount, usb_num_rows):
+def load_and_prepare_usb(usb_name, sheet_name, usb_lxid, usb_issuer, usb_amount, usb_num_rows, asset_type_column=None):
     print("Loading Trustee data")
     usb = pd.read_excel(usb_name, sheet_name=sheet_name, skiprows=usb_num_rows, engine='openpyxl')
     print("Trustee data loaded successfully")
     columns = [usb_lxid, usb_issuer, usb_amount]
+    if asset_type_column:
+        columns.append(asset_type_column)
     usb = usb[columns]
     usb[usb_amount] = usb[usb_amount].astype(str).str.replace(',', '').apply(pd.to_numeric, errors='coerce')
+    if asset_type_column:
+        usb = usb[usb[asset_type_column] != 'Equity']
+        usb = usb.drop(columns=[asset_type_column])
     usb = usb.rename(columns={
         usb_lxid: 'LXID',
         usb_issuer: 'Issuer Name',
@@ -72,10 +77,10 @@ def finalize_merge(merge, wso, usb_agg):
     final_merged['Difference'] = final_merged['Difference'].apply(format_number)
     return final_merged[['LXID', 'Issuer Name', 'Quantity Traded_wso', 'Quantity Traded_trustee', 'Difference']]
 
-def convert_csv(final_df, name):
-    print(f"Converting to CSV: {name}")
-    final_df.to_csv(name, index=False)
-    print(f"CSV {name} created successfully")
+def convert_excel(final_df, name):
+    print(f"Converting to Excel: {name}")
+    final_df.to_excel(name, index=False)
+    print(f"Excel file {name} created successfully")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -83,6 +88,7 @@ def index():
         wso_file = request.files['wso_file']
         usb_file = request.files['usb_file']
         naming_type = request.form['naming_type']
+        asset_type_present = 'asset_type_present' in request.form
 
         if naming_type == 'standard':
             wso_lxid = 'Asset_LoanXIDAssetID_Name'
@@ -100,6 +106,10 @@ def index():
         usb_amount = request.form['usb_amount']
         final_name = request.form['final_name']
 
+        asset_type_column = None
+        if asset_type_present:
+            asset_type_column = request.form['asset_type_column']
+
         upload_folder = os.path.join(os.getcwd(), 'uploads')
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder)
@@ -113,22 +123,23 @@ def index():
         print("Files saved successfully")
 
         wso = load_and_prepare_wso(wso_file_path, wso_lxid, wso_issuer, wso_amount)
-        usb = load_and_prepare_usb(usb_file_path, usb_sheet, usb_lxid, usb_issuer, usb_amount, usb_num_rows)
+        usb = load_and_prepare_usb(usb_file_path, usb_sheet, usb_lxid, usb_issuer, usb_amount, usb_num_rows, asset_type_column)
         usb_agg = aggregate_usb_data(usb)
         merge = merge_data(wso, usb_agg)
         final = finalize_merge(merge, wso, usb_agg)
-        final_csv_path = os.path.join(upload_folder, final_name)
-        convert_csv(final, final_csv_path)
+        final_excel_path = os.path.join(upload_folder, final_name)
+        convert_excel(final, final_excel_path)
 
         print("Processing complete")
 
         os.remove(wso_file_path)
         os.remove(usb_file_path)
 
-        return send_file(final_csv_path, as_attachment=True, mimetype='text/csv')
+        return send_file(final_excel_path, as_attachment=True, mimetype='text/excel')
 
     return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
