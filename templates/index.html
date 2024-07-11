@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Processing Form</title>
+</head>
+<body>
+    <h1>Upload Files to Process</h1>
+    <form method="post" enctype="multipart/form-data">
+        <label for="wso_file">WSO CSV File:</label><br>
+        <input type="file" name="wso_file" required><br><br>
+        <label for="wso_lxid">WSO LXID Column:</label><br>
+        <input type="text" name="wso_lxid" required><br><br>
+        <label for="wso_issuer">WSO Issuer Column:</label><br>
+        <input type="text" name="wso_issuer" required><br><br>
+        <label for="wso_amount">WSO Quantity Traded Column:</label><br>
+        <input type="text" name="wso_amount" required><br><br>
+        <label for="usb_file">Trustee CSV File:</label><br>
+        <input type="file" name="usb_file" required><br><br>
+        <label for="usb_lxid">Trustee LXID Column:</label><br>
+        <input type="text" name="usb_lxid" required><br><br>
+        <label for="usb_issuer">Trustee Issuer Column:</label><br>
+        <input type="text" name="usb_issuer" required><br><br>
+        <label for="usb_amount">Trustee Quantity Traded Column:</label><br>
+        <input type="text" name="usb_amount" required><br><br>
+        <label for="final_name">Final CSV File Name (include.csv):</label><br>
+        <input type="text" name="final_name" required><br><br>
+        <input type="submit" value="Process Files">
+    </form>
+</body>
+</html>
