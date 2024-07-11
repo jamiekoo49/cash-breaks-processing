@@ -20,13 +20,10 @@
     </script>
 </head>
 <body>
-    <h1>Upload Files to Process</h1>
+    <h1>Data Processing for Tie-Outs</h1>
     <form method="post" enctype="multipart/form-data">
         <label for="wso_file">WSO CSV File:</label><br>
         <input type="file" name="wso_file" required><br><br>
-
-        <label for="usb_file">Trustee CSV File:</label><br>
-        <input type="file" name="usb_file" required><br><br>
 
         <label for="naming_type">WSO Naming Type:</label><br>
         <select name="naming_type" id="naming_type" onchange="toggleNonstandardFields()" required>
@@ -35,23 +32,29 @@
         </select><br><br>
 
         <div id="nonstandard-fields">
-            <label for="wso_lxid">WSO LXID:</label><br>
+            <label for="wso_lxid">WSO LXID Column Name:</label><br>
             <input type="text" name="wso_lxid"><br><br>
 
-            <label for="wso_issuer">WSO Issuer:</label><br>
+            <label for="wso_issuer">WSO Issuer Column Name:</label><br>
             <input type="text" name="wso_issuer"><br><br>
 
-            <label for="wso_amount">WSO Amount:</label><br>
+            <label for="wso_amount">WSO Amount Column Name:</label><br>
             <input type="text" name="wso_amount"><br><br>
         </div>
 
-        <label for="usb_lxid">Trustee LXID:</label><br>
+        <label for="usb_file">Trustee CSV File:</label><br>
+        <input type="file" name="usb_file" required><br><br>
+
+        <label for="usb_num_rows">Number of empty rows before column names for Trustee data:</label><br>
+        <input type="text" name="usb_num_rows" required><br><br>
+
+        <label for="usb_lxid">Trustee LXID Column Name:</label><br>
         <input type="text" name="usb_lxid" required><br><br>
 
-        <label for="usb_issuer">Trustee Issuer:</label><br>
+        <label for="usb_issuer">Trustee Issuer Column Name:</label><br>
         <input type="text" name="usb_issuer" required><br><br>
 
-        <label for="usb_amount">Trustee Amount:</label><br>
+        <label for="usb_amount">Trustee Amount Column Name:</label><br>
         <input type="text" name="usb_amount" required><br><br>
 
         <label for="final_name">Final CSV Name (include .csv):</label><br>

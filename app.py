@@ -17,9 +17,9 @@ def load_and_prepare_wso(wso_name, wso_lxid, wso_issuer, wso_amount):
     })
     return wso
 
-def load_and_prepare_usb(usb_name, usb_lxid, usb_issuer, usb_amount):
+def load_and_prepare_usb(usb_name, usb_lxid, usb_issuer, usb_amount, usb_num_rows):
     print("Loading Trustee data")
-    usb = pd.read_csv(usb_name, skiprows=4)
+    usb = pd.read_csv(usb_name, skiprows=usb_num_rows)
     print("Trustee data loaded successfully")
     columns = [usb_lxid, usb_issuer, usb_amount]
     usb = usb[columns]
@@ -77,6 +77,7 @@ def index():
             wso_issuer = request.form['wso_issuer']
             wso_amount = request.form['wso_amount']
 
+        usb_num_rows = int(request.form['usb_num_rows'])
         usb_lxid = request.form['usb_lxid']
         usb_issuer = request.form['usb_issuer']
         usb_amount = request.form['usb_amount']
@@ -95,7 +96,7 @@ def index():
         print("Files saved successfully")
 
         wso = load_and_prepare_wso(wso_file_path, wso_lxid, wso_issuer, wso_amount)
-        usb = load_and_prepare_usb(usb_file_path, usb_lxid, usb_issuer, usb_amount)
+        usb = load_and_prepare_usb(usb_file_path, usb_lxid, usb_issuer, usb_amount, usb_num_rows)
         usb_agg = aggregate_usb_data(usb)
         merge = merge_data(wso, usb_agg)
         final = finalize_merge(merge, wso, usb_agg)
