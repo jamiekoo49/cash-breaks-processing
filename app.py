@@ -17,9 +17,13 @@ def load_and_prepare_wso(wso_name, wso_lxid, wso_issuer, wso_amount):
     })
     return wso
 
-def load_and_prepare_usb(usb_name, sheet_name, usb_lxid, usb_issuer, usb_amount, usb_num_rows, asset_type_column=None):
+def load_and_prepare_usb(usb_name, usb_lxid, usb_issuer, usb_amount,
+                         usb_num_rows, sheet_name=None, asset_type_column=None):
     print("Loading Trustee data")
-    usb = pd.read_excel(usb_name, sheet_name=sheet_name, skiprows=usb_num_rows, engine='openpyxl')
+    if sheet_name:
+        usb = pd.read_excel(usb_name, sheet_name=sheet_name, skiprows=usb_num_rows, engine='openpyxl')
+    else:
+        usb = pd.read_excel(usb_name, skiprows=usb_num_rows, engine='openpyxl')
     print("Trustee data loaded successfully")
     columns = [usb_lxid, usb_issuer, usb_amount]
     if asset_type_column:
@@ -89,6 +93,7 @@ def index():
         usb_file = request.files['usb_file']
         naming_type = request.form['naming_type']
         asset_type_present = 'asset_type_present' in request.form
+        multiple_sheets = 'multiple_sheets' in request.form
 
         if naming_type == 'standard':
             wso_lxid = 'Asset_LoanXIDAssetID_Name'
@@ -99,7 +104,7 @@ def index():
             wso_issuer = request.form['wso_issuer']
             wso_amount = request.form['wso_amount']
 
-        usb_sheet = request.form['usb_sheet']
+        usb_sheet = request.form['usb_sheet'] if multiple_sheets else None
         usb_num_rows = int(request.form['usb_num_rows'])
         usb_lxid = request.form['usb_lxid']
         usb_issuer = request.form['usb_issuer']
@@ -123,7 +128,8 @@ def index():
         print("Files saved successfully")
 
         wso = load_and_prepare_wso(wso_file_path, wso_lxid, wso_issuer, wso_amount)
-        usb = load_and_prepare_usb(usb_file_path, usb_sheet, usb_lxid, usb_issuer, usb_amount, usb_num_rows, asset_type_column)
+        usb = load_and_prepare_usb(usb_file_path, usb_lxid, usb_issuer, usb_amount,
+                                   usb_num_rows, usb_sheet, asset_type_column)
         usb_agg = aggregate_usb_data(usb)
         merge = merge_data(wso, usb_agg)
         final = finalize_merge(merge, wso, usb_agg)
@@ -141,5 +147,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 

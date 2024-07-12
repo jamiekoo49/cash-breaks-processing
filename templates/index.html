@@ -25,62 +25,83 @@
             }
         }
 
+        function toggleSheetNameField() {
+            const multipleSheetsCheckbox = document.getElementById('multiple_sheets');
+            const sheetNameField = document.getElementById('sheet-name-field');
+            if (multipleSheetsCheckbox.checked) {
+                sheetNameField.style.display = 'block';
+            } else {
+                sheetNameField.style.display = 'none';
+            }
+        }
+
         window.onload = function() {
             toggleNonstandardFields();
             toggleAssetTypeField();
+            toggleSheetNameField();
         };
     </script>
 </head>
 <body>
     <h1>Data Processing for Tie-Outs</h1>
     <form method="post" enctype="multipart/form-data">
-        <label for="wso_file">WSO CSV File:</label><br>
+        <label for="wso_file"><strong>WSO CSV File:</strong></label><br>
         <input type="file" name="wso_file" accept=".csv" required><br><br>
 
-        <label for="naming_type">WSO Columns Naming Type:</label><br>
+        <label for="naming_type"><strong>WSO Columns Naming Type:</strong></label><br>
         <select name="naming_type" id="naming_type" onchange="toggleNonstandardFields()" required>
             <option value="standard">Standard</option>
             <option value="nonstandard">Nonstandard</option>
         </select><br><br>
 
-        <div id="nonstandard-fields">
-            <label for="wso_lxid">WSO LXID Column Name:</label><br>
+        <p>Standard option means the WSO Data File already has column names
+            <b>Asset_LoanXIDAssetID_Name</b> for LoanX ID, <b>Issuer_Name</b> for the Issuer Name,
+            and <b>QuantityTraded</b> for the Quantity Traded. Nonstandard option means other
+            column naming conventions.</p>
+
+        <div id="nonstandard-fields" style="display:none;">
+            <label for="wso_lxid"><strong>WSO LXID Column Name:</strong></label><br>
             <input type="text" name="wso_lxid"><br><br>
 
-            <label for="wso_issuer">WSO Issuer Column Name:</label><br>
+            <label for="wso_issuer"><strong>WSO Issuer Column Name:</strong></label><br>
             <input type="text" name="wso_issuer"><br><br>
 
-            <label for="wso_amount">WSO Amount Column Name:</label><br>
+            <label for="wso_amount"><strong>WSO Amount Column Name:</strong></label><br>
             <input type="text" name="wso_amount"><br><br>
         </div>
 
-        <label for="usb_file">Trustee Excel File:</label><br>
+        <label for="usb_file"><strong>Trustee Excel File:</strong></label><br>
         <input type="file" name="usb_file" accept=".xls,.xlsx,.xlsm" required><br><br>
 
-        <label for="asset_type_present">Does the Trustee file contain equity amounts?</label><br>
+        <label for="multiple_sheets"><strong>Does the Trustee file contain multiple sheets?</strong></label><br>
+        <input type="checkbox" id="multiple_sheets" name="multiple_sheets" onchange="toggleSheetNameField()"><br><br>
+
+        <div id="sheet-name-field" style="display:none;">
+            <label for="usb_sheet"><strong>Trustee Holdings Sheet Name:</strong></label><br>
+            <input type="text" name="usb_sheet"><br><br>
+        </div>
+
+        <label for="asset_type_present"><strong>Does the Trustee file contain equity amounts?</strong></label><br>
         <input type="checkbox" id="asset_type_present" name="asset_type_present" onchange="toggleAssetTypeField()"><br><br>
 
         <div id="asset-type-field" style="display:none;">
-            <label for="asset_type_column">Asset Type Column Name:</label><br>
+            <label for="asset_type_column"><strong>Asset Type Column Name:</strong></label><br>
             <input type="text" name="asset_type_column"><br><br>
         </div>
 
-        <label for="usb_sheet">Trustee Sheet Name:</label><br>
-        <input type="text" name="usb_sheet" required><br><br>
-
-        <label for="usb_num_rows">Number of rows before column names for Trustee data:</label><br>
+        <label for="usb_num_rows"><strong>Number of rows before column names for Trustee data:</strong></label><br>
         <input type="text" name="usb_num_rows" required><br><br>
 
-        <label for="usb_lxid">Trustee LXID Column Name:</label><br>
+        <label for="usb_lxid"><strong>Trustee LXID Column Name:</strong></label><br>
         <input type="text" name="usb_lxid" required><br><br>
 
-        <label for="usb_issuer">Trustee Issuer Column Name:</label><br>
+        <label for="usb_issuer"><strong>Trustee Issuer Column Name:</strong></label><br>
         <input type="text" name="usb_issuer" required><br><br>
 
-        <label for="usb_amount">Trustee Amount Column Name:</label><br>
+        <label for="usb_amount"><strong>Trustee Amount Column Name:</strong></label><br>
         <input type="text" name="usb_amount" required><br><br>
 
-        <label for="final_name">Final Excel File Name (include .xlsx):</label><br>
+        <label for="final_name"><strong>Final Excel File Name (include .xlsx):</strong></label><br>
         <input type="text" name="final_name" required><br><br>
 
         <input type="submit" value="Upload and Process">
